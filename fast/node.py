@@ -7,11 +7,16 @@ a solid, abstacted version would save a lot of time.
 ... and be emotionally satisfying.
 
 
+@todo: Add functionality for atoms: FASTNode(3) --> basically just FASTNode(identity, 3)
+    if not isinstance(function, Callable) and len(args)==0 and len(kwargs)==0:
+        self.function = identity
+        self.args = (function, )
+        self.kwargs = {}
 @todo: Add the recursive part
 """
 # import operator
 import abc
-from collections import Mapping
+from collections import Mapping, Callable
 
 
 def dict_map(function, mapping):
@@ -41,15 +46,12 @@ def denode(obj):
     else:
         return obj
 
-
 def call_denode(function, *positional, **keywords):
     return call_map(denode, function, *positional, **keywords)
-    # return function(
-    #     # *[value for value in positional],
-    #     *map(denode, positional),
-    #     # **{key:denode(value) for key, value in keywords.items()},
-    #     **map_values(denode, keywords)
-    # )
+
+def identity(obj):
+    """Unary identity function"""
+    return obj
 
 
 class FASTNode(object):
@@ -60,6 +62,7 @@ class FASTNode(object):
         self.function = function
         self.positional = positional
         self.keywords = keywords
+
 
     def _denode(self):
         return call_map(denode, self.function, *self.positional, **self.keywords)
@@ -95,6 +98,24 @@ class FASTNode(object):
         else:
             return False
 
+
+class fastnode(object):
+    constructor = FASTNode
+    def __new__(cls, *args, **kwargs):
+        if len(args) == 1 and len(kwargs) == 0:
+            if not isinstance(args[0], Callable):
+                return cls.constructor(identity, args[0])
+        return cls.constructor(*args, **kwargs)    
+
+
+# def fastnode(function, *positional, **keywords):
+#     """
+#     Simple constructor, used for dispatching Atom VS Function
+#     """
+#     # Atom
+#     if not isinstance(function, Callable) and len(positional)==0 and len(keywords)==0:
+#         return FASTNode(identity, positional[0])
+#     return FASTNode(function, *positional, **keywords)
 
 
 class NodeInterface(object):
