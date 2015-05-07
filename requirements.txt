@@ -1,0 +1,13 @@
+# Example: Package hosted on PyPI
+six=1.9.0
+
+# Example: Package hosted via a Version Control System (VCS), eg git
+-e git+git://git.myproject.org/MyProject#egg=MyProject
+-e git+https://git.myproject.org/MyProject#egg=MyProject
+-e git+ssh://git.myproject.org/MyProject#egg=MyProject
+-e git+git@git.myproject.org:MyProject#egg=MyProject
+
+# Also, you can specify a tag name or commit hash:
+-e git://git.myproject.org/MyProject.git@master#egg=MyProject
+-e git://git.myproject.org/MyProject.git@v1.0#egg=MyProject
+-e git://git.myproject.org/MyProject.git@da39a3ee5e6b4b0d3255bfef95601890afd80709#egg=MyProject
